@@ -1,9 +1,10 @@
 #include "Common.h"
 #include "ServerDatDetour.h"
+#include "Memory.h"
 
 typedef char* (__cdecl* FuncTQServer)(char*, int);
 
-DWORD FnSubA63C75 = 0x00A63C75;
+DWORD FnSubA63C75 = Memory::FindPattern("\xCC\x8B\x74\x24\x08\x85\xF6\x74\x62", "?xxxxxxxx"); // ENV_DX9 = 0x00A63C75  | ENV_DX8 = 0x00A653F2
 
 static std::string LoadFileToString(const char* path)
 {
@@ -37,6 +38,15 @@ char* __cdecl TQServer(char* data1, int data2)
 
 void ServerDatDetour::Init()
 {
+    // Test find by pattern
+    /*char buffer[32];
+    DWORD CallAddress = Memory::FindPattern(
+        "\xCC\x8B\x74\x24\x08\x85\xF6\x74\x62",
+        "?xxxxxxxx"
+    );
+    sprintf(buffer, "0x%08X", CallAddress);
+    MessageBoxA(nullptr, buffer, "DWORD value", MB_OK);*/
+
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
     DetourAttach(&(PVOID&)FnSubA63C75, TQServer);
