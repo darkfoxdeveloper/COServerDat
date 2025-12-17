@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Undocumented">
+      <UniqueIdentifier>{08e0dacf-1cfe-4cda-8bec-028c81c3385a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File">
+      <UniqueIdentifier>{884fb029-4354-4e11-b87b-78f5a13018e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\Memory">
+      <UniqueIdentifier>{ae6992cd-cfbb-4cc5-8214-f77f9abccd18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File">
+      <UniqueIdentifier>{39c38eaf-645f-42b5-8e5a-26bdd3739dee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Install">
+      <UniqueIdentifier>{c9b16c8c-4b6f-4c5d-a1cc-04b023b2d145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Memory">
+      <UniqueIdentifier>{baf67a0c-cee3-4d56-9bef-7843b15dfac9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Memory.h">
+      <Filter>Header File\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Undocumented</Filter>
+    </ClInclude>
+    <ClInclude Include="Initialize.h">
+      <Filter>Undocumented</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDatDetour.h">
+      <Filter>Header File\Memory</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Memory.cpp">
+      <Filter>Source File\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="DllMain.cpp">
+      <Filter>Source File\Install</Filter>
+    </ClCompile>
+    <ClCompile Include="Initialize.cpp">
+      <Filter>Source File\Install</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDatDetour.cpp">
+      <Filter>Source File\Memory</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
