@@ -36,12 +36,17 @@ DWORD GetVersionFromClient(const std::string& path)
 DWORD GetServerBufferAddress()
 {
     DWORD ServerDatAddr = 0;
+    DWORD FPSAddr = 0;
     DWORD version = GetVersionFromClient("version.dat");
+    unsigned char NEWFPS[2] = { 0xEB, 0x0D }; // JMP FPS
     if (version >= 5517 && version < 6270) {
-        ServerDatAddr = 0x772601; // 5517-6270
+        //ServerDatAddr = 0x772601; // 5517-6270
+        ServerDatAddr = Memory::FindPattern("\x56\x8B\x74\x24\x08\x85\xF6\x0F\x84\x00\x00\x00\x00\x8A\x06\x84\xC0\x74\x7A", "xxxxxxxxx????xxxxxx"); // 5517+
     }
     else if (version >= 6270) {
         ServerDatAddr = Memory::FindPattern("\xCC\x8B\x74\x24\x08\x85\xF6\x74\x62", "?xxxxxxxx"); // 6270+
+		FPSAddr = Memory::FindPattern("\x73\x0D\x2B\xC8\x03\xCB", "xxxxxx");
+        Memory::WriteMemory(FPSAddr, NEWFPS, 2);
     }
     return ServerDatAddr;
 }
@@ -83,9 +88,9 @@ signed char* __cdecl SERVER_HOOK(char* a1, int a2)
 }
 void ServerDatDetour::Init()
 {
-    // Find address by pattern
+    // Show debug address by pattern
     /*char buffer[32];
-    sprintf(buffer, "0x%08X", FnSubA63C75);
+    sprintf(buffer, "0x%08X", Server_ADDRESS);
     MessageBoxA(nullptr, buffer, "Injected, MEMORYADDRESS", MB_OK);*/
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());

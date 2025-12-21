@@ -5,6 +5,10 @@ Hook for load decrypted Server.dat in Conquer Online (Need other DLL for working
 This DLL must be **injected into `Conquer.exe`**.  
 Its purpose is to **intercept the loading of `Server.dat`** and replace its content at runtime with a custom uncrypted xml.
 
+## Features
+- Read from COServer.dat (bypass real server.dat)
+- FPs Unlock (Only for V6609 DX8 & DX9)
+
 ---
 
 ## Requirements
