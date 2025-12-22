@@ -45,7 +45,6 @@ DWORD GetServerBufferAddress()
     // V6371 TO V6736 (In this patch starting using Env_DX8 & Env_DX9 folder)
     // Pattern ranges: 5095-5589 | 5590-6099 | 6100-6711
     if (version >= 5095 && version <= 5589) {
-        // 5187 not working, injection timing issue?
         ServerDatAddr = Memory::FindPattern("\x56\x8B\x74\x24\x08\x85\xF6\x0F\x84", "xxxxxxxxx"); // 0x772601 - V5517
     }
     else if (version >= 5590 && version <= 6099) {
