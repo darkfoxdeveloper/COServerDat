@@ -44,8 +44,11 @@ DWORD GetServerBufferAddress()
     // V6176 TO V6370 (V6187 not need flash fix)
     // V6371 TO V6736 (In this patch starting using Env_DX8 & Env_DX9 folder)
     // Pattern provably ranges: 5095-5589 | 5590-6099 | 6100-6711
-    if (version >= 5517 && version <= 5589) {
-        ServerDatAddr = Memory::FindPattern("\x56\x8B\x74\x24\x08\x85\xF6\x0F\x84\x00\x00\x00\x00\x8A\x06\x84\xC0\x74\x7A", "xxxxxxxxx????xxxxxx"); // 0x772601; // V5517
+    if (version >= 5095 && version <= 5589) {
+        ServerDatAddr = Memory::FindPattern("\x56\x8B\x74\x24\x08\x85\xF6\x0F\x84\x00\x00\x00\x00\x8A\x06\x84\xC0\x74\x7A", "xxxxxxxxx????xxxxxx"); // 0x772601 - V5517
+    }
+    else if (version >= 5590 && version <= 6099) {
+        ServerDatAddr = Memory::FindPattern("\x56\x8B\x74\x24\x08\x85\xF6\x74\x77\x8A\x06\x84\xC0", "xxxxxxxxxxxxx"); // 0x81E8AC - V5695
     }
     else if (version >= 6100 && version <= 6711) {
         ServerDatAddr = Memory::FindPattern("\xCC\x8B\x74\x24\x08\x85\xF6\x74\x62", "?xxxxxxxx"); // ENV_DX9 = 0x00A63C75  | ENV_DX8 = 0x00A653F2 (Working 6609, 6270)
