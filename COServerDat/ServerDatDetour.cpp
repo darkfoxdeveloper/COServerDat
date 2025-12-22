@@ -45,7 +45,8 @@ DWORD GetServerBufferAddress()
     // V6371 TO V6736 (In this patch starting using Env_DX8 & Env_DX9 folder)
     // Pattern ranges: 5095-5589 | 5590-6099 | 6100-6711
     if (version >= 5095 && version <= 5589) {
-        ServerDatAddr = Memory::FindPattern("\x56\x8B\x74\x24\x08\x85\xF6\x0F", "xxxxxxxx"); // 0x772601 - V5517
+        // 5187 not working, injection timing issue?
+        ServerDatAddr = Memory::FindPattern("\x56\x8B\x74\x24\x08\x85\xF6\x0F\x84", "xxxxxxxxx"); // 0x772601 - V5517
     }
     else if (version >= 5590 && version <= 6099) {
         ServerDatAddr = Memory::FindPattern("\x56\x8B\x74\x24\x08\x85\xF6\x74\x77\x8A\x06\x84\xC0", "xxxxxxxxxxxxx"); // 0x81E8AC - V5695
@@ -61,43 +62,46 @@ DWORD GetServerBufferAddress()
 }
 DWORD Server_ADDRESS = GetServerBufferAddress();
 int hookdat = 0;
+bool ServerDatChanged = false;
 typedef signed char* (__cdecl* ServerHOOK)(char* a1, int a2);
 signed char* __cdecl SERVER_HOOK(char* a1, int a2)
 {
+    ServerHOOK originalTQ = (ServerHOOK)Server_ADDRESS;
     hookdat++;
-    if (hookdat == 4)
+    if (hookdat == 4 && !ServerDatChanged)
     {
         FILE* pFile;
         pFile = fopen("COServer.dat", "rb");
         if (pFile != NULL)
         {
-            char currentline[10000];
-            assert(pFile != NULL);
-            char bufferServerDat[10000];
-            int i = 0;
+            std::string bufferServerDat;
+            char currentline[1024];
             while (fgets(currentline, sizeof(currentline), pFile) != NULL)
             {
-                if (i == 0)
-                {
-                    strcpy(bufferServerDat, currentline);
-                    i++;
-                }
-                else
-                    strcat(bufferServerDat, currentline);
+                bufferServerDat += currentline;
             }
-            strcpy(a1, bufferServerDat);
+            strcpy(a1, bufferServerDat.c_str());
             fclose(pFile);
+            ServerDatChanged = true;
+            return originalTQ(a1, a2);
+        }
+        else {
+            MessageBoxA(0, "Cannot load COServer.dat", "Error loading COServer.dat", MB_OK);
         }
     }
-    ServerHOOK originalIQ = (ServerHOOK)Server_ADDRESS;
-    return originalIQ(a1, a2);
+    return originalTQ(a1, a2);
 }
 void ServerDatDetour::Init()
 {
-    // Show debug address by pattern
-    /*char buffer[32];
-    sprintf(buffer, "0x%08X", Server_ADDRESS);
-    MessageBoxA(nullptr, buffer, "Injected, MEMORYADDRESS", MB_OK);*/
+    bool debugInfo = false;
+    if (debugInfo) {
+        DWORD version = GetVersionFromClient("version.dat");
+        std::string versionStr = std::to_string(version);
+        // Show debug address by pattern
+        char buffer[32];
+        sprintf(buffer, "0x%08X", Server_ADDRESS);
+        MessageBoxA(nullptr, versionStr.c_str(), buffer, MB_OK);
+    }
     if (Server_ADDRESS == 0) {
         MessageBoxA(0, "No compatible version with COServerDat", "OK", MB_OK);
         exit(0);

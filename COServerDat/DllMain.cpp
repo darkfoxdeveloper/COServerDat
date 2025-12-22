@@ -1,16 +1,15 @@
-#include "Common.h"
 #include "Initialize.h"
 
 //Dll Export To Allow IAT Loading
 __declspec(dllexport) INT Initialize() { return NULL; }
 
-BOOL WINAPI DllMain(HINSTANCE HInstance, DWORD DwReason, LPVOID lPReserved) {
-	if (DwReason == DLL_PROCESS_ATTACH) {
-		Initialize::Install();
-		DisableThreadLibraryCalls(HInstance);
-	}
-	else if (DwReason == DLL_PROCESS_DETACH) {
-		FreeLibraryAndExitThread(HInstance, NULL);
-	}
-	return TRUE;
+BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason, LPVOID) {
+    if (reason == DLL_PROCESS_ATTACH) {
+        DisableThreadLibraryCalls(hInst);
+        CreateThread(nullptr, 0, [](LPVOID)->DWORD {
+            Initialize::Install();
+            return 0;
+            }, nullptr, 0, nullptr);
+    }
+    return TRUE;
 }

@@ -3,16 +3,13 @@
 #include <stdint.h>
 #include <Windows.h>
 #include <process.h>
-#include <stdint.h>
 #include "stdlib.h"
 #include "psapi.h"
 #include <thread>
 #include <chrono>
 #include <cstdio>
 #include <cstring>
-#include <iostream>
 #include <tchar.h>
-#include <TlHelp32.h>
 #include <sstream>
 #include <fstream>
 #include <vector>
