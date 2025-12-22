@@ -38,7 +38,7 @@ DWORD GetServerBufferAddress()
     DWORD ServerDatAddr = 0;
     DWORD FPSAddr = 0;
     DWORD version = GetVersionFromClient("version.dat");
-    unsigned char NEWFPS[2] = { 0xEB, 0x0D }; // JMP FPS
+    unsigned char NEWFPS[1] = { 0xEB }; // JMP FPS
 	// IMPORTANT INFO ABOUT VERSIONS:
     // V6022 TO V6175 (5827 - 6021 Error login but working Server.dat pattern)
     // V6176 TO V6370 (V6187 not need flash fix)
@@ -52,8 +52,10 @@ DWORD GetServerBufferAddress()
     }
     else if (version >= 6100 && version <= 6711) {
         ServerDatAddr = Memory::FindPattern("\xCC\x8B\x74\x24\x08\x85\xF6\x74\x62", "?xxxxxxxx"); // ENV_DX9 = 0x00A63C75  | ENV_DX8 = 0x00A653F2 (Working 6609, 6270)
-		FPSAddr = Memory::FindPattern("\x73\x0D\x2B\xC8\x03\xCB", "xxxxxx");
-        Memory::WriteMemory(FPSAddr, NEWFPS, 2);
+    }
+    FPSAddr = Memory::FindPattern("\x73\x0E\x2B\xC8\x83\xC1\x19", "x?xx??");
+    if (FPSAddr > 0) {
+        Memory::WriteMemory(FPSAddr, NEWFPS, 1);
     }
     return ServerDatAddr;
 }
@@ -92,10 +94,6 @@ signed char* __cdecl SERVER_HOOK(char* a1, int a2)
 }
 void ServerDatDetour::Init()
 {
-    // FPs tst 5103
-    /*unsigned char NEWFPS[2] = {0xEB, 0x0D}; // JMP FPS
-    DWORD FPSAddr = Memory::FindPattern("\x73\x0E\x2B\xC8\x83\xC1\x19\x51", "x?xxxxxx"); // 5103
-    Memory::WriteMemory(FPSAddr, NEWFPS, 2);*/
     // Show debug address by pattern
     /*char buffer[32];
     sprintf(buffer, "0x%08X", Server_ADDRESS);
