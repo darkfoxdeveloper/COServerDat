@@ -38,14 +38,23 @@ VOID GUICalculator::Calculator(INT Width, INT Height, BOOL IsFull)
 }
 
 VOID GUICalculator::ChangeScreenSize() {
-	const LPVOID BASE_W_ADDR = (LPVOID)(Memory::FindPatternN("\xC7\x05\x3C\xB8\x70\x00\x00\x04\x00\x00", "xxxxxxxxxx", 1) + 6);
-	const LPVOID BASE_H_ADDR = (LPVOID)(Memory::FindPatternN("\xC7\x05\x3C\xB8\x70\x00\x00\x04\x00\x00", "xxxxxxxxxx", 2) + 6);
-
-	const LPVOID BASE_PUZZLE_W_ADDR = (LPVOID)(0x004AD21A + 1);
-	const LPVOID BASE_PUZZLE_H_ADDR = (LPVOID)(0x004AD231 + 1);
-	const LPVOID BASE_PUZZLE_H2_ADDR = (LPVOID)(0x004AD251 + 1);
-
-	const LPVOID BASE_MAIN_UI0_ADDR = (LPVOID)(0x00488D09 + 1);
-	const LPVOID BASE_MAIN_UI1_ADDR = (LPVOID)(0x00488D0E + 1);
-	//Memory::WriteMemory();
+	int width = GetPrivateProfileIntA("GameResolution", "Width", 1920, CONFIG_FILE); // 1024
+	int height = GetPrivateProfileIntA("GameResolution", "Height", 1024, CONFIG_FILE); // 768
+	const DWORD BASE_W_ADDR = (Memory::FindPatternN("\xC7\x05\x3C\xB8\x70\x00\x00\x04\x00\x00", "xxxxxxxxxx", 1) + 6);
+	const DWORD BASE_H_ADDR = (Memory::FindPatternN("\xC7\x05\x3C\xB8\x70\x00\x00\x04\x00\x00", "xxxxxxxxxx", 2) + 6);
+	const DWORD BASE_PUZZLE_W_ADDR = (Memory::FindPatternN("\xB9\x20\x03\x00\x00", "xxxxxxxxxx", 1) + 1);
+	const DWORD BASE_PUZZLE_H_ADDR = (Memory::FindPatternN("\xB8\x58\x02\x00\x00", "xxxxxxxxxx", 1) + 1);
+	const DWORD BASE_PUZZLE_H2_ADDR = (Memory::FindPatternN("\xB8\x58\x02\x00\x00", "xxxxxxxxxx", 2) + 1);
+	const DWORD BASE_MAIN_UI0_ADDR = (Memory::FindPatternN("\xFF\x15\x00\x00\x00\x00\x2D\x00\x00\x00\x00\x8D\x8E\x00\x00\x00\x00\x50\x53\xE8\x00\x00\x00\x00", "xx????x????xx????xxx????", 1) + 1);
+	const DWORD BASE_MAIN_UI1_ADDR = (Memory::FindPatternN("\xFF\x15\x00\x00\x00\x00\x2D\x00\x00\x00\x00\x8D\x8E\x00\x00\x00\x00\x50\x53\xE8\x00\x00\x00\x00", "xx????x????xx????xxx????", 1) + 5 + 1);
+	Memory::WriteMemory(BASE_W_ADDR, &width, 4);
+	Memory::WriteMemory(BASE_H_ADDR, &height, 4);
+	Memory::WriteMemory(BASE_PUZZLE_W_ADDR, &width, 4);
+	Memory::WriteMemory(BASE_PUZZLE_H_ADDR, &height, 4);
+	Memory::WriteMemory(BASE_PUZZLE_H2_ADDR, &height, 4);
+	int positionUI0 = height - 141;
+	int positionUI1 = (width - 1024) / 2;
+	Memory::WriteMemory(BASE_MAIN_UI0_ADDR, &positionUI0, 4);
+	Memory::WriteMemory(BASE_MAIN_UI1_ADDR, &positionUI1, 4);
+	// en 6609 no va pero... teoricamente deberia ir en 5065 o en 5187
 }
