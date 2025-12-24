@@ -9,6 +9,7 @@ class Memory
 {
 public:	
 	static DWORD FindPattern(CHAR * Pattern, CHAR * Mask);
+	static DWORD FindPatternN(CHAR* Pattern, CHAR* Mask, INT FoundN);
 	static VOID WriteMemory(DWORD Address, VOID * Buffer, INT Size);
 	static VOID PlaceJMP(BYTE * Address, DWORD JumpTo, DWORD Length);	
 };

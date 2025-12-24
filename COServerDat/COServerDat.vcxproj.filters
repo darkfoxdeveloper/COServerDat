@@ -33,6 +33,9 @@
     <ClInclude Include="ServerDatDetour.h">
       <Filter>Header File\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="GUICalculator.h">
+      <Filter>Header File\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source File\Install</Filter>
     </ClCompile>
     <ClCompile Include="ServerDatDetour.cpp">
+      <Filter>Source File\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="GUICalculator.cpp">
       <Filter>Source File\Memory</Filter>
     </ClCompile>
   </ItemGroup>

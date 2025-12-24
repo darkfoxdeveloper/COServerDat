@@ -21,6 +21,28 @@ DWORD Memory::FindPattern(CHAR * Pattern, CHAR * Mask) {
 	return NULL;
 }
 
+DWORD Memory::FindPatternN(CHAR* Pattern, CHAR* Mask, INT FoundN) {
+	MODULEINFO ModuleInfo = { 0 };
+	GetModuleInformation(GetCurrentProcess(), GetModuleHandle(NULL), &ModuleInfo, sizeof(MODULEINFO));
+	DWORD Base = (DWORD)ModuleInfo.lpBaseOfDll;
+	DWORD Size = (DWORD)ModuleInfo.SizeOfImage;
+	DWORD PatternLength = strlen(Mask);
+	INT FoundNCurrent = 0;
+	for (DWORD I = 0; I < Size - PatternLength; I++) {
+		BOOL Found = TRUE;
+		for (DWORD J = 0; J < PatternLength; J++) {
+			Found &= Mask[J] == '?' || Pattern[J] == *(CHAR*)(Base + I + J);
+		}
+		if (Found) {
+			FoundNCurrent++;
+			if (FoundNCurrent == FoundN) {
+				return Base + I;
+			}
+		}
+	}
+	return NULL;
+}
+
 VOID Memory::PlaceJMP(BYTE * Address, DWORD JumpTo, DWORD Length) {
 	DWORD Protect, BackUp, RelAddress;
 	VirtualProtect(Address, Length, PAGE_EXECUTE_READWRITE, &Protect);

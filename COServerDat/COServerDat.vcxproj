@@ -12,12 +12,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="GUICalculator.h" />
     <ClInclude Include="Initialize.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="ServerDatDetour.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="GUICalculator.cpp" />
     <ClCompile Include="Initialize.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="ServerDatDetour.cpp" />
