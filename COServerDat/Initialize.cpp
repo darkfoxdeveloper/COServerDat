@@ -39,6 +39,5 @@ VOID Initialize::Install() {
     if (version == 5187) {
         GUICalculator::ChangeScreenSize();
     }
-	ServerDatDetour::Init();
-	//GUICalculator::FullScreen();
+	ServerDatDetour::Init(version);
 }

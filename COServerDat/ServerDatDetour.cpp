@@ -2,42 +2,10 @@
 #include "ServerDatDetour.h"
 #include "Memory.h"
 typedef signed char* (__cdecl* FuncTQServer)(char*, int);
-DWORD GetVersionFromClient(const std::string& path)
-{
-    std::ifstream f(path);
-    if (!f.is_open())
-        throw std::runtime_error("Cannot open: " + path);
-
-    std::string line;
-    while (std::getline(f, line)) {
-        size_t i = 0;
-        while (i < line.size() && std::isspace(static_cast<unsigned char>(line[i]))) ++i;
-
-        if (i < line.size() && line[i] == '#') {
-            ++i;
-            while (i < line.size() && std::isspace(static_cast<unsigned char>(line[i]))) ++i;
-            unsigned long long v = 0;
-            bool any = false;
-            while (i < line.size() && std::isdigit(static_cast<unsigned char>(line[i]))) {
-                any = true;
-                v = v * 10 + (line[i] - '0');
-                ++i;
-            }
-            if (!any)
-                throw std::runtime_error("Not has server version.");
-            if (v > 0xFFFFFFFFULL)
-                throw std::runtime_error("Range value out DWORD.");
-            return static_cast<DWORD>(v);
-        }
-    }
-
-    throw std::runtime_error("No found version with '#'.");
-}
-DWORD GetServerBufferAddress()
+DWORD GetServerBufferAddress(DWORD version)
 {
     DWORD ServerDatAddr = 0;
     DWORD FPSAddr = 0;
-    DWORD version = GetVersionFromClient("version.dat");
     unsigned char NEWFPS[1] = { 0xEB }; // JMP FPS
 	// IMPORTANT INFO ABOUT VERSIONS:
     // V6022 TO V6175 (5827 - 6021 Error login but working Server.dat pattern)
@@ -59,7 +27,7 @@ DWORD GetServerBufferAddress()
     }
     return ServerDatAddr;
 }
-DWORD Server_ADDRESS = GetServerBufferAddress();
+DWORD Server_ADDRESS;
 int hookdat = 0;
 bool ServerDatChanged = false;
 typedef signed char* (__cdecl* ServerHOOK)(char* a1, int a2);
@@ -90,11 +58,11 @@ signed char* __cdecl SERVER_HOOK(char* a1, int a2)
     }
     return originalTQ(a1, a2);
 }
-void ServerDatDetour::Init()
+void ServerDatDetour::Init(DWORD version)
 {
+    Server_ADDRESS = GetServerBufferAddress(version);
     bool debugInfo = false;
     if (debugInfo) {
-        DWORD version = GetVersionFromClient("version.dat");
         std::string versionStr = std::to_string(version);
         // Show debug address by pattern
         char buffer[32];

@@ -1,4 +1,4 @@
-#include "GUICalculator.h"
+﻿#include "GUICalculator.h"
 #include "Memory.h"
 
 const char CONFIG_FILE[]{ ".\\Settings.ini" };
@@ -7,10 +7,7 @@ int height = GetPrivateProfileIntA("GameResolution", "Height", 768, CONFIG_FILE)
 std::string msg = "";
 
 VOID GUICalculator::ChangeScreenSize() {
-	// TODO: acabar de mirar, parece que hay algo modificado en el exe del cliente 5187 que hace que funcione bien al alterar la resolucion pero sino peta al hacer login al pj
-	// aparte tambien parece que tiene que tener algo modificado del GUI y GameSetup.ini (modo especifico 2 o algo asi) para que cuadre todo bien
-
-	/* Para cuando toque hacerlo dinamico basarme en patterns, por ahora acabar de ver como cuadrar bien para 5187, ver claramente que es lo que se modifica */
+	/* TODO for do it with patterns for multiple versions */
 	//const DWORD BASE_W_ADDR = (Memory::FindPatternN("\xC7\x05\x3C\xB8\x70\x00\x00\x04\x00\x00", "xxxxxxxxxx", 1) + 6);
 	//const DWORD BASE_H_ADDR = (Memory::FindPatternN("\xC7\x05\x3C\xB8\x70\x00\x00\x04\x00\x00", "xxxxxxxxxx", 2) + 6);
 	//const DWORD BASE_PUZZLE_W_ADDR = (Memory::FindPatternN("\xB9\x20\x03\x00\x00", "xxxxxxxxxx", 1) + 1);
@@ -42,7 +39,6 @@ VOID GUICalculator::ChangeScreenSize() {
 	DWORD dwProc = (DWORD)hProcess;
 	int read = 0;
 	SIZE_T bytes_read = 0, bytes_written = 0;
-
 	if (ReadProcessMemory(hProcess, BASE_W_ADDR, &read, 4, &bytes_read) || GetLastError() == ERROR_PARTIAL_COPY) {
 		if (bytes_read == 0)
 			MessageBoxA(NULL, "Could not get width memory offset. 1", "ReadProcessMemory error", MB_OK);

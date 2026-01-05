@@ -9,5 +9,5 @@ class ServerDatDetour
 		_Reserved_ HANDLE hFile,
 		_In_ DWORD dwFlags);
 public:
-	static void Init();
+	static void Init(DWORD version);
 };
