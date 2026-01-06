@@ -4,5 +4,5 @@
 class GUICalculator
 {
 public:
-	static VOID ChangeScreenSize();
+	static VOID ChangeScreenSize(DWORD version);
 };

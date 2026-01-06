@@ -20,9 +20,11 @@
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="GUICalculator.cpp" />
+    <ClCompile Include="WindowHook.cpp" />
     <ClCompile Include="Initialize.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="ServerDatDetour.cpp" />
+    <ClCompile Include="WindowHook.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

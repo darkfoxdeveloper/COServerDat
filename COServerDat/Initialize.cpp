@@ -35,9 +35,7 @@ DWORD VersionClientGet(const std::string& path)
 }
 
 VOID Initialize::Install() {
-	DWORD version = VersionClientGet("version.dat");
-    if (version == 5187) {
-        GUICalculator::ChangeScreenSize();
-    }
-	ServerDatDetour::Init(version);
+	DWORD VERSION = VersionClientGet("version.dat");
+    GUICalculator::ChangeScreenSize(VERSION);
+	ServerDatDetour::Init(VERSION);
 }

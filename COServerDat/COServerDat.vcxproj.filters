@@ -53,6 +53,12 @@
     <ClCompile Include="GUICalculator.cpp">
       <Filter>Source File\Memory</Filter>
     </ClCompile>
+    <ClCompile Include="WindowHook.cpp">
+      <Filter>Source File\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowHook.h">
+      <Filter>Header File\Memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
