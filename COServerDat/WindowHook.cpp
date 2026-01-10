@@ -8,6 +8,7 @@ static BOOL(WINAPI* TrueMoveWindow)(
 const char CONFIG_FILE[]{ ".\\Settings.ini" };
 int widthGUI = GetPrivateProfileIntA("GameResolution", "Width", 1024, CONFIG_FILE);
 int heightGUI = GetPrivateProfileIntA("GameResolution", "Height", 768, CONFIG_FILE);
+int ClientVersion = 0;
 
 static void Log(const std::string& msg)
 {
@@ -20,12 +21,17 @@ static void Log(const std::string& msg)
 
 static bool IsTargetCall(HWND hWnd, int X, int Y, int W, int H, BOOL repaint)
 {
-    // se llama constantemente con estos params: Y=492 W=1024 H=16
     Log("MoveWindow called: X=" + std::to_string(X) + " Y=" + std::to_string(Y) + " W=" + std::to_string(W) + " H=" + std::to_string(H));
-    if (H == 141) {
-        return true;
+    if (ClientVersion == 5165) {
+        if (X == 0 && W == 1024 && H == 768) {
+            return true;
+        }
     }
-
+    if (ClientVersion == 5187) {
+        if (H == 141) {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -34,15 +40,18 @@ static BOOL WINAPI HookMoveWindow(HWND hWnd, int X, int Y, int nWidth, int nHeig
 {
     if (IsTargetCall(hWnd, X, Y, nWidth, nHeight, bRepaint))
     {
-        X = (widthGUI - 1024) / 2;
-        Y = heightGUI - 141;
+        nWidth = widthGUI;
+        nHeight = heightGUI;
+        //X = (widthGUI - 1024) / 2;
+        //Y = heightGUI - 141;
     }
 
     return TrueMoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint);
 }
 
-bool WindowHook::InstallMoveWindowHook()
+bool WindowHook::InstallMoveWindowHook(INT VERSION)
 {
+    ClientVersion = VERSION;
     DetourRestoreAfterWith();
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());

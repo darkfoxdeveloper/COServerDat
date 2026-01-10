@@ -4,6 +4,6 @@
 class WindowHook
 {
 public:
-	static bool InstallMoveWindowHook();
+	static bool InstallMoveWindowHook(INT VERSION);
 	static bool RemoveMoveWindowHook();
 };
