@@ -7,7 +7,8 @@ Its purpose is to **intercept the loading of `Server.dat`** and replace its cont
 
 ## Features
 - Read from COServer.dat (bypass real server.dat)
-- FPs Unlock (Only for V6609 DX8 & DX9)
+- FPs Unlock (In all versions now)
+- Screen Resolution Changes to FHD (1920x1024) (Only V5187 for now, that require a lot of work yet)
 
 ---
 

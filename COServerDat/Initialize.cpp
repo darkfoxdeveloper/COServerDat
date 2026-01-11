@@ -40,7 +40,7 @@ VOID Initialize::Install() {
     bool blockChanges = Config::Instance().AreScreenChangesDisabled();
 	DWORD VERSION = VersionClientGet("version.dat");
 
-    int  width = Config::Instance().GetWidth();
+ /*   int  width = Config::Instance().GetWidth();
     int  height = Config::Instance().GetHeight();
     bool fullscreen = Config::Instance().IsFullscreenEnabled();
     std::string msg =
@@ -51,7 +51,7 @@ VOID Initialize::Install() {
         "Fullscreen: " + std::string(fullscreen ? "true" : "false") + "\n" +
         "Screen changes disabled: " + std::string(blockChanges ? "true" : "false");
 
-    MessageBoxA(nullptr, msg.c_str(), "Shared Config Test", MB_OK);
+    MessageBoxA(nullptr, msg.c_str(), "Shared Config Test", MB_OK);*/
 
     if (!blockChanges) {
         GUICalculator::ChangeScreenSize(VERSION);
