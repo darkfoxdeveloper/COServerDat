@@ -14,6 +14,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="GUICalculator.h" />
+    <ClInclude Include="GUIPatcher.h" />
     <ClInclude Include="Initialize.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="ServerDatDetour.h" />
@@ -22,6 +23,7 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="GUICalculator.cpp" />
+    <ClCompile Include="GUIPatcher.cpp" />
     <ClCompile Include="WindowHook.cpp" />
     <ClCompile Include="Initialize.cpp" />
     <ClCompile Include="Memory.cpp" />

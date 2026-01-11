@@ -25,6 +25,12 @@
     <Filter Include="Source File\Config">
       <UniqueIdentifier>{2ac9f22e-dab1-497a-bb9a-3e5179ca413a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header File\Utils">
+      <UniqueIdentifier>{d2d5dfa7-1311-4d9a-b977-22bfc4f51520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Utils">
+      <UniqueIdentifier>{d5747d1a-591f-4810-a822-38b4ef5b77a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.h">
@@ -44,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="Config.h">
       <Filter>Header File\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIPatcher.h">
+      <Filter>Header File\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Source File\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIPatcher.cpp">
+      <Filter>Source File\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 #include "ServerDatDetour.h"
 #include "GUICalculator.h"
 #include "Config.h"
+#include "GuiPatcher.h"
 
 DWORD VersionClientGet(const std::string& path)
 {
@@ -40,20 +41,17 @@ VOID Initialize::Install() {
     bool blockChanges = Config::Instance().AreScreenChangesDisabled();
 	DWORD VERSION = VersionClientGet("version.dat");
 
- /*   int  width = Config::Instance().GetWidth();
-    int  height = Config::Instance().GetHeight();
-    bool fullscreen = Config::Instance().IsFullscreenEnabled();
-    std::string msg =
-        loaded ? "Config loaded\n\n" : "Config not found, defaults used\n\n";
-
-    msg +=
-        "Resolution: " + std::to_string(width) + "x" + std::to_string(height) + "\n" +
-        "Fullscreen: " + std::string(fullscreen ? "true" : "false") + "\n" +
-        "Screen changes disabled: " + std::string(blockChanges ? "true" : "false");
-
-    MessageBoxA(nullptr, msg.c_str(), "Shared Config Test", MB_OK);*/
-
     if (!blockChanges) {
+        // Specific replaces with matches from GUI.ini - Screen Resolution fix
+        if (VERSION == 5187) {
+            auto res = GuiIniPatcher::Apply(true, true);
+            /*std::string msg =
+                "Applied: " + std::to_string(res.applied) + "\n" +
+                "Examined: " + std::to_string(res.examined) + "\n\n";
+            for (const auto& line : res.log)
+                msg += line + "\n";*/
+            //MessageBoxA(nullptr, msg.c_str(), "GUI.ini patch", MB_OK);
+        }
         GUICalculator::ChangeScreenSize(VERSION);
     }
 	ServerDatDetour::Init(VERSION);

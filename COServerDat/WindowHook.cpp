@@ -10,29 +10,34 @@ int widthGUI = GetPrivateProfileIntA("GameResolution", "Width", 1024, CONFIG_FIL
 int heightGUI = GetPrivateProfileIntA("GameResolution", "Height", 768, CONFIG_FILE);
 int ClientVersion = 0;
 
-static void Log(const std::string& msg)
-{
-    std::ofstream file("hook.log", std::ios::app);
-    if (!file.is_open())
-        return;
 
-    file << msg << std::endl;
-}
+//static void Log(const std::string& msg)
+//{
+//    std::ofstream file("hook.log", std::ios::app);
+//    if (!file.is_open())
+//        return;
+//
+//    file << msg << std::endl;
+//}
 
 static bool IsTargetCall(HWND hWnd, int X, int Y, int W, int H, BOOL repaint)
 {
-    Log("MoveWindow called: X=" + std::to_string(X) + " Y=" + std::to_string(Y) + " W=" + std::to_string(W) + " H=" + std::to_string(H));
-    if (ClientVersion == 5165) {
-        if (X == 0 && W == 1024 && H == 768) {
-            return true;
-        }
-    }
-    if (ClientVersion == 5187) {
-        if (H == 141) {
-            return true;
-        }
-    }
-    return false;
+    //Log("MoveWindow called: X=" + std::to_string(X) + " Y=" + std::to_string(Y) + " W=" + std::to_string(W) + " H=" + std::to_string(H));
+    return ClientVersion == 5187 && H == 141;
+}
+
+static void ForceGameLayout(HWND hWnd)
+{
+    SetWindowPos(hWnd, nullptr, 0, 0, 0, 0,
+        SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+    RECT rc{};
+    GetClientRect(hWnd, &rc);
+    int cw = rc.right - rc.left;
+    int ch = rc.bottom - rc.top;
+    SendMessage(hWnd, WM_SIZE, SIZE_RESTORED, MAKELPARAM(cw, ch));
+    SendMessage(hWnd, WM_EXITSIZEMOVE, 0, 0);
+    RedrawWindow(hWnd, nullptr, nullptr,
+        RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
 }
 
 
@@ -40,10 +45,12 @@ static BOOL WINAPI HookMoveWindow(HWND hWnd, int X, int Y, int nWidth, int nHeig
 {
     if (IsTargetCall(hWnd, X, Y, nWidth, nHeight, bRepaint))
     {
-        nWidth = widthGUI;
-        nHeight = heightGUI;
-        //X = (widthGUI - 1024) / 2;
-        //Y = heightGUI - 141;
+        X = (widthGUI - 1024) / 2;
+        Y = heightGUI - 141;
+        HWND root = GetAncestor(hWnd, GA_ROOT);
+        if (root) hWnd = root;
+        ForceGameLayout(hWnd);
+        return TRUE;
     }
 
     return TrueMoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint);
