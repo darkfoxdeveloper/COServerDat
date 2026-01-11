@@ -19,6 +19,12 @@
     <Filter Include="Source File\Memory">
       <UniqueIdentifier>{baf67a0c-cee3-4d56-9bef-7843b15dfac9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header File\Config">
+      <UniqueIdentifier>{0ce9889a-875d-4647-b764-30078ba68061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Config">
+      <UniqueIdentifier>{2ac9f22e-dab1-497a-bb9a-3e5179ca413a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.h">
@@ -35,6 +41,9 @@
     </ClInclude>
     <ClInclude Include="GUICalculator.h">
       <Filter>Header File\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Header File\Config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="WindowHook.h">
       <Filter>Header File\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source File\Config</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #include "Initialize.h"
 #include "ServerDatDetour.h"
 #include "GUICalculator.h"
+#include "Config.h"
 
 DWORD VersionClientGet(const std::string& path)
 {
@@ -35,7 +36,25 @@ DWORD VersionClientGet(const std::string& path)
 }
 
 VOID Initialize::Install() {
+    bool loaded = Config::Instance().Load("config.json");
+    bool blockChanges = Config::Instance().AreScreenChangesDisabled();
 	DWORD VERSION = VersionClientGet("version.dat");
-    GUICalculator::ChangeScreenSize(VERSION);
+
+    int  width = Config::Instance().GetWidth();
+    int  height = Config::Instance().GetHeight();
+    bool fullscreen = Config::Instance().IsFullscreenEnabled();
+    std::string msg =
+        loaded ? "Config loaded\n\n" : "Config not found, defaults used\n\n";
+
+    msg +=
+        "Resolution: " + std::to_string(width) + "x" + std::to_string(height) + "\n" +
+        "Fullscreen: " + std::string(fullscreen ? "true" : "false") + "\n" +
+        "Screen changes disabled: " + std::string(blockChanges ? "true" : "false");
+
+    MessageBoxA(nullptr, msg.c_str(), "Shared Config Test", MB_OK);
+
+    if (!blockChanges) {
+        GUICalculator::ChangeScreenSize(VERSION);
+    }
 	ServerDatDetour::Init(VERSION);
 }
