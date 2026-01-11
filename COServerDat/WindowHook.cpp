@@ -1,15 +1,15 @@
 #include "Common.h"
 #include "WindowHook.h"
+#include "Config.h"
+
+bool loadedGUIConfig = Config::Instance().Load("config.json");
+int widthGUI = Config::Instance().GetWidth();
+int heightGUI = Config::Instance().GetHeight();
+int ClientVersion = 0;
 
 static BOOL(WINAPI* TrueMoveWindow)(
     HWND hWnd, int X, int Y, int nWidth, int nHeight, BOOL bRepaint
     ) = MoveWindow;
-
-const char CONFIG_FILE[]{ ".\\Settings.ini" };
-int widthGUI = GetPrivateProfileIntA("GameResolution", "Width", 1024, CONFIG_FILE);
-int heightGUI = GetPrivateProfileIntA("GameResolution", "Height", 768, CONFIG_FILE);
-int ClientVersion = 0;
-
 
 //static void Log(const std::string& msg)
 //{

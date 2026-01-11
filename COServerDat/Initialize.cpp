@@ -39,20 +39,21 @@ DWORD VersionClientGet(const std::string& path)
 VOID Initialize::Install() {
     bool loaded = Config::Instance().Load("config.json");
     bool blockChanges = Config::Instance().AreScreenChangesDisabled();
+    bool FHDMode = Config::Instance().IsFHDResolutionEnabled();
+
 	DWORD VERSION = VersionClientGet("version.dat");
 
     if (!blockChanges) {
         // Specific replaces with matches from GUI.ini - Screen Resolution fix
         if (VERSION == 5187) {
-            auto res = GuiIniPatcher::Apply(true, true);
-            /*std::string msg =
-                "Applied: " + std::to_string(res.applied) + "\n" +
-                "Examined: " + std::to_string(res.examined) + "\n\n";
-            for (const auto& line : res.log)
-                msg += line + "\n";*/
-            //MessageBoxA(nullptr, msg.c_str(), "GUI.ini patch", MB_OK);
+            if (FHDMode) {
+                auto res = GuiIniPatcher::Apply(true, true);
+                GUICalculator::ChangeScreenSize(VERSION);
+            }
+            else {
+                auto res = GuiIniPatcher::Revert(false, true);
+            }
         }
-        GUICalculator::ChangeScreenSize(VERSION);
     }
 	ServerDatDetour::Init(VERSION);
 }

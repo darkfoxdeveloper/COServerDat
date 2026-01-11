@@ -11,6 +11,7 @@ public:
 
     // Read-only access
     bool IsHighResolutionEnabled() const;
+    bool IsFHDResolutionEnabled() const;
     bool IsFullscreenEnabled() const;
     bool AreScreenChangesDisabled() const;
 
@@ -29,4 +30,5 @@ private:
     bool m_highResolution = false;
     bool m_fullscreen = false;
     bool m_disableScreenChanges = false;
+    bool m_FHDResolution = false;
 };

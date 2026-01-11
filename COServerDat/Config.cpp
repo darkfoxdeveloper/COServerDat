@@ -29,9 +29,11 @@ bool Config::Load(const std::string& filePath)
     if (!root.is_object())
         return false;
 
-    // Only read what we care about, ignore everything else
     m_highResolution =
         root.value("HighResolution", m_highResolution);
+
+    m_FHDResolution =
+        root.value("FHDResolution", m_FHDResolution);
 
     m_fullscreen =
         root.value("FullScreen", m_fullscreen);
@@ -47,6 +49,11 @@ bool Config::IsHighResolutionEnabled() const
     return m_highResolution;
 }
 
+bool Config::IsFHDResolutionEnabled() const
+{
+    return m_FHDResolution;
+}
+
 bool Config::IsFullscreenEnabled() const
 {
     return m_fullscreen;
@@ -59,10 +66,10 @@ bool Config::AreScreenChangesDisabled() const
 
 int Config::GetWidth() const
 {
-    return m_highResolution ? 1920 : 1024;
+    return m_FHDResolution ? 1920 : 1024;
 }
 
 int Config::GetHeight() const
 {
-    return m_highResolution ? 1080 : 768;
+    return m_FHDResolution ? 1080 : 768;
 }
